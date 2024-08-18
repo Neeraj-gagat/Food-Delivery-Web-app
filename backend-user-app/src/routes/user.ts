@@ -3,6 +3,7 @@ import { SigninSchema, SignupSchema } from "../types/types";
 import { prismaClient } from "../db/db";
 import  Jwt  from "jsonwebtoken";
 import { JWT_PASSWORD } from "../config";
+import { authMiddleWare } from "../middleware";
 
 const router = Router();
 
@@ -75,7 +76,7 @@ router.post("/signin", async (req, res) => {
 
 })
 
-router.get("/", async (req, res) => {
+router.get("/", authMiddleWare, async (req, res) => {
     // @ts-ignore
     const id = req.id;
     const user = await prismaClient.user.findFirst({
