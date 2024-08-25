@@ -33,6 +33,6 @@ model Order {
 model Item {
   id          String        @id @default(uuid())
   name        String
-  order       Order       @relation(fields: [orderId], references: [id])
-  orderId     String
+  order       Order?       @relation(fields: [orderId], references: [id])
+  orderId     String?
 }
