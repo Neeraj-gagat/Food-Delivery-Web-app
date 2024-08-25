@@ -70,6 +70,10 @@ router.get("/:orderId", authMiddleWare, async (req, res) => {
             items:true
         }
     }) 
+
+    return res.json({
+        order
+    })
 })
 
 export const orderRouter = router;
