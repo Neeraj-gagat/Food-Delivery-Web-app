@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import * as THREE from "three"
 
 export const Scene = () => {
-    let tex = useTexture("./image2.webp");
+    let tex = useTexture("./food.png");
     let cyl = useRef(null);
     
     useFrame((state,delta) => {
