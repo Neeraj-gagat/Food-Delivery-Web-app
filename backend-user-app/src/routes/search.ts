@@ -4,7 +4,7 @@ import { authMiddleWare } from "../middleware";
 
 const router = Router();
 
-router.get("search",async(req,res) => {
+router.get("/",async(req,res) => {
 
   const lat = req.query.lat || '40.7128';
   const lon = req.query.lon || '-74.0060';
