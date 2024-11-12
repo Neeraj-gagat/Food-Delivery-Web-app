@@ -1,13 +1,12 @@
 import { Router } from "express";
 import { authMiddleWare } from "../middleware";
-// 9779204812
 
 const router = Router();
 
-router.get("/",async(req,res) => {
+router.get("/", authMiddleWare,async(req,res) => {
 
-  const lat = req.query.lat || '40.7128';
-  const lon = req.query.lon || '-74.0060';
+  const lat = req.query.lat || '30.2410937';
+  const lon = req.query.lon || '75.8426829';
   const radius = req.query.radius || '1000';
   const query = `[out:json];node["amenity"="restaurant"](around:${radius},${lat},${lon});out;`;
   const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
