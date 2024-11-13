@@ -36,3 +36,18 @@ model Item {
   order       Order?       @relation(fields: [orderId], references: [id])
   orderId     String?
 }
+
+model Merchant {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique
+  name       String    
+  password   String
+  menu       MenuItem[]
+}
+
+model MenuItem {
+  id            Int       @id @default(autoincrement())
+  name          String  
+  merchant      Merchant  @relation(fields: [merchantId], references: [id])
+  merchantId    Int
+}
