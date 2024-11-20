@@ -6,7 +6,8 @@ import { JWT_PASSWORD } from "../config";
 import { authMiddleWare } from "../middleware";
 
 const router = Router();
-
+// TODO FOR LATER 
+// @ts-ignore
 router.post("/signup",async(req, res) => {
     const body = req.body;
     const parsedData = MerchantSignupschema.safeParse(body);
@@ -42,7 +43,8 @@ router.post("/signup",async(req, res) => {
     })
 
 })
-
+// TODO FOR LATER 
+// @ts-ignore
 router.post("/signin",async(req,res) => {
     const body = req.body;
     const parsedData = MerchantSigninSchema.safeParse(body);
@@ -72,6 +74,21 @@ router.post("/signin",async(req,res) => {
 
     res.json({
         token:token
+    })
+})
+// @ts-ignore
+router.get("/",authMiddleWare, async(req,res) => {
+    // @ts-ignore
+    const id = req.id;
+    const merchant = await prismaClient.merchant.findFirst({
+        where:{
+            id
+        },
+        select:{
+            email:true,
+            name:true, 
+            menu:true
+        }
     })
 })
 
