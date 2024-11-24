@@ -1,4 +1,4 @@
-import { string, z } from "zod"
+import { number, string, z } from "zod"
 
 export const MerchantSignupschema = z.object({
     email:z.string().min(6),
@@ -13,5 +13,6 @@ export const MerchantSigninSchema = z.object({
 
 export const ItemSchema = z.object({
     name: string().min(3),
-    image:string().min(5)
+    image:string().min(5),
+    merchantId:number()
 })
