@@ -1,23 +1,18 @@
+import { NextFunction, Request, Response } from "express"
 import jwt , {JwtPayload} from "jsonwebtoken"
 import { JWT_PASSWORD } from "./config"
-import { NextFunction, Request, Response } from "express"
 
-export function authMiddleWare (req:Request, res:Response, next:NextFunction) {
-    const token = req.headers.authorization;
-
-    if (!token) {
-        return res.status(401).json({
-            message: "Authorization token required"
-        })
-    }
+export function authMiddleWare (req:Request, res:Response, next:NextFunction):void {
+    const token = req.headers.authorization as unknown as string;
 
     try {
-         const payload = jwt.verify(token,JWT_PASSWORD) as JwtPayload;
+         const payload = jwt.verify(token,JWT_PASSWORD);
         // @ts-ignore
          req.id = payload.id;
          next()
     } catch (e) {
-        return res.status(403).json({
+        console.log(e)
+         res.status(403).json({
             message: "you are not signed up"
         })
     }
