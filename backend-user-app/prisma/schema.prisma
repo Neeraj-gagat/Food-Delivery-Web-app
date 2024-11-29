@@ -18,13 +18,13 @@ model User {
   email       String    @unique
   name        String
   password    String    
-  orders      Order[]
+  orders      Order?
 }
 
 model Order {
   id           String        @id @default(uuid())
   user         User          @relation(fields: [userId],references: [id])
-  userId       Int
+  userId       Int           @unique
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   items        Item[]
@@ -46,4 +46,12 @@ model Merchant {
   name       String    
   password   String
   menu       Item[]
+}
+
+model Rider {
+  id         Int       @default(autoincrement())
+  email      String    @unique
+  name       String
+  password   String
+  status     Boolean
 }
