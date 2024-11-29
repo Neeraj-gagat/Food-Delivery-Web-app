@@ -47,3 +47,11 @@ model Merchant {
   password   String
   menu       Item[]
 }
+
+model Rider {
+  id         Int       @default(autoincrement())
+  email      String    @unique
+  name       String
+  password   String
+  status     Boolean
+}
