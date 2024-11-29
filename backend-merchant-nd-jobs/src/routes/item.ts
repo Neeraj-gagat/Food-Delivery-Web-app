@@ -4,8 +4,8 @@ import { ItemSchema } from "../types/type";
 import { prismaClient } from "../db/db";
 
 const router = Router();
-//@ts-ignore
-router.post("/create-item",authMiddleWare, async (req,res) => {
+
+router.post("/create-item",authMiddleWare, async (req,res):Promise<any> => {
     const body = req.body;
     const parsedData = ItemSchema.safeParse(body);
 
