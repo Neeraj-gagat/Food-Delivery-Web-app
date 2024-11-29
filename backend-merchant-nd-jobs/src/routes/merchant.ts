@@ -1,8 +1,8 @@
-import { Express, Request, Response, Router } from "express";
+import { Router } from "express";
 import { MerchantSigninSchema, MerchantSignupschema } from "../types/type";
 import { prismaClient } from "../db/db";
 import  Jwt  from "jsonwebtoken";
-import { JWT_PASSWORD } from "../config";
+import { JWT_PASSWORDMERCHANT } from "../config";
 import { authMiddleWare } from "../middleware";
 
 const router = Router(); 
@@ -69,7 +69,7 @@ router.post("/signin",async(req, res):Promise<any> => {
 
     const token = Jwt.sign({
         id: merchant.id
-    },JWT_PASSWORD)
+    },JWT_PASSWORDMERCHANT)
 
     res.json({
         token:token
