@@ -53,5 +53,5 @@ model Rider {
   email      String    @unique
   name       String
   password   String
-  status     Boolean
+  status     Boolean   @default(false)
 }

@@ -44,7 +44,7 @@ router.post("/signup",async(req, res):Promise<any> => {
     })
 })
 
-router.post("signin",async(req, res):Promise<any> => {
+router.post("/signin",async(req, res):Promise<any> => {
     const body  = req.body;
     const parsedData = Ridersigninschema.safeParse(body);
 
@@ -54,7 +54,7 @@ router.post("signin",async(req, res):Promise<any> => {
         })
     }
 
-    const Rider = await prismaClient.rider.findFirst({
+    const Rider = await prismaClient.rider.findUnique({
         where:{
             email:parsedData.data.email,
             password:parsedData.data.password
@@ -67,8 +67,14 @@ router.post("signin",async(req, res):Promise<any> => {
         })
     }
 
+    await prismaClient.rider.update({
+        where:{email:Rider.email},
+        data:{status:true}
+    })
+
     const token = jwt.sign({
-        id: Rider.id
+        id: Rider.id,
+        email:Rider.email
     },JWT_PASSWORDRIDER)
 
     res.json({
