@@ -15,4 +15,5 @@ app.use("/api/v1/order", orderRouter);
 
 app.use("/api/v1/restaurants", searchRouter);
 
-app.listen(3000)
+// app.listen(3000)
+export default  app;
