@@ -5,7 +5,7 @@ import { authMiddleWare } from "../middleware";
 
 const router = Router();
 
-router.post("/",authMiddleWare, async (req, res) => {
+router.post("/create-order",authMiddleWare, async (req, res) => {
     // @ts-ignore
     const id = req.id;
     const body = req.body;
@@ -21,6 +21,7 @@ router.post("/",authMiddleWare, async (req, res) => {
         const orderId = await prismaClient.order.create({
             data:{
                 userId: id,
+                merchantId: parsedData.data.merchantId
                 items:{
                     create:parsedData.data.items.map((x) => ({
                         name:x.item

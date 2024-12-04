@@ -2,7 +2,7 @@ import { Router } from "express";
 import { RiderSignupSchema, Ridersigninschema } from "../types/type";
 import { prismaClient } from "../db/db";
 import jwt from "jsonwebtoken";
-import { authMiddleWare } from "../middleware2";
+import { authMiddleWare } from "../middleware";
 import { JWT_PASSWORDRIDER } from "../config";
 
 const router = Router();

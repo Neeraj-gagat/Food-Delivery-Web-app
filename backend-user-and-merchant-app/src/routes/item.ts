@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { authMiddleWare } from "../middleware";
-import { ItemSchema } from "../types/type";
+import { ItemSchema } from "../types/types";
 import { prismaClient } from "../db/db";
 
 const router = Router();
 
-router.post("/create-item",authMiddleWare, async (req,res):Promise<any> => {
+router.post("/create-item",authMiddleWare, async (req,res) => {
     const body = req.body;
     const parsedData = ItemSchema.safeParse(body);
 

@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { MerchantSigninSchema, MerchantSignupschema } from "../types/type";
+import { MerchantSigninSchema, MerchantSignupschema } from "../types/types";
 import { prismaClient } from "../db/db";
 import  Jwt  from "jsonwebtoken";
 import { JWT_PASSWORDMERCHANT } from "../config";
-import { authMiddleWare } from "../middleware";
+import { authMiddleWare2 } from "../middleware";
 
 const router = Router(); 
 
-router.post("/signup",async(req, res):Promise<any> => {
+router.post("/signup",async(req, res) => {
     const body = req.body;
     const parsedData = MerchantSignupschema.safeParse(body);
 
@@ -44,7 +44,7 @@ router.post("/signup",async(req, res):Promise<any> => {
 })
 
 
-router.post("/signin",async(req, res):Promise<any> => {
+router.post("/signin",async(req, res) => {
     const body = req.body;
     const parsedData = MerchantSigninSchema.safeParse(body);
 
@@ -76,7 +76,7 @@ router.post("/signin",async(req, res):Promise<any> => {
     })
 })
 
-router.get("/",authMiddleWare, async(req,res):Promise<any> => {
+router.get("/",authMiddleWare2, async(req,res) => {
     // @ts-ignore
     const id = req.id;
     const merchant = await prismaClient.merchant.findFirst({
