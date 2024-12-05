@@ -16,7 +16,7 @@ router.post("/create-item",authMiddleWare, async (req,res) => {
     }
 
     try {
-        const itemid = await prismaClient.item.create({
+        const itemid = await prismaClient.merchantItem.create({
             data:({
                 name:parsedData.data.name,
                 image:parsedData.data.image,

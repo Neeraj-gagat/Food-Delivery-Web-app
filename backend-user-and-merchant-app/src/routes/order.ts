@@ -21,7 +21,7 @@ router.post("/create-order",authMiddleWare, async (req, res) => {
         const orderId = await prismaClient.order.create({
             data:{
                 userId: id,
-                merchantId: parsedData.data.merchantId
+                merchantId: parsedData.data.merchantId,
                 items:{
                     create:parsedData.data.items.map((x) => ({
                         name:x.item
@@ -64,7 +64,7 @@ router.get("/:orderId", authMiddleWare, async (req, res) => {
     const orderId = req.params.orderId
     const order = await prismaClient.order.findFirst({
         where:{
-            id:orderId,
+            id:Number(orderId),
             userId:id
         },
         include:{

@@ -12,7 +12,7 @@ export const SigninSchema = z.object({
 })
 
 export const orderCreateSchema = z.object({
-    merchantId: z.string().min(1),
+    merchantId: z.number().min(1),
     items: z.array(z.object({
         item: z.string()
     }))
