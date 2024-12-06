@@ -11,43 +11,53 @@ const io = new Server(server)
 app.use(express.json());
 app.use(cors());
 
+const TOPIC_NAME = "deliveries"
+
+
+
 
 app.use("/api/v1/rider",Riderrouter)
 
-// // WebSocket Connection
-// io.on("connection", (Socket) => {
-//     console.log("connected")
+const deliveries:String[] = []
+const activeDeliveries: Record<
+  string,
+  { riderSocketId: string; userSocketId?: string; status: string }
+> = {};
 
-//     // Triggers when Client Request dilevery-updates
-//     Socket.on("/track-dilevery", (orderId) => {
-//         console.log(`Tracking dilevery for orderId: ${orderId}`)
+// WebSocket Connection
+io.on("connection", (Socket) => {
+    console.log("connected")
+
+    // Triggers when Client Request dilevery-updates
+    Socket.on("/track-dilevery", (orderId) => {
+        console.log(`Tracking dilevery for orderId: ${orderId}`)
         
-//         if (!deliveries[orderId]) {
-//             Socket.emit("",{message: "Dilevery Not Found"})
-//             return;
-//         }
+        if (!deliveries[orderId]) {
+            Socket.emit("",{message: "Dilevery Not Found"})
+            return;
+        }
         
-//         Socket.on("update-location", (data) => {
-//             const { orderId, location } = data;
+        Socket.on("update-location", (data) => {
+            const { orderId, location } = data;
         
-//             if (!activeDeliveries[orderId]) {
-//               console.log("Invalid delivery update");
-//               return;
-//             }
+            if (!activeDeliveries[orderId]) {
+              console.log("Invalid delivery update");
+              return;
+            }
         
-//             const delivery = activeDeliveries[orderId];
+            const delivery = activeDeliveries[orderId];
         
-//             // Notify the specific user tracking this delivery
-//             if (delivery.userSocketId) {
-//               io.to(delivery.userSocketId).emit("delivery-update", {
-//                 orderId,
-//                 location,
-//                 status: delivery.status,
-//               });
-//               console.log(`Location update sent to user ${delivery.userSocketId} for orderId: ${orderId}`);
-//             }
-//           });
-//     })
-// })
+            // Notify the specific user tracking this delivery
+            if (delivery.userSocketId) {
+              io.to(delivery.userSocketId).emit("delivery-update", {
+                orderId,
+                location,
+                status: delivery.status,
+              });
+              console.log(`Location update sent to user ${delivery.userSocketId} for orderId: ${orderId}`);
+            }
+          });
+    })
+})
 
 app.listen(3001)
