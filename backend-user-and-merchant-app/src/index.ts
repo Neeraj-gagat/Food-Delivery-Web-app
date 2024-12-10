@@ -3,7 +3,6 @@ import cors from "cors"
 import { userRouter } from "./routes/user";
 import { orderRouter } from "./routes/order";
 import { searchRouter } from "./routes/search";
-import { MerchantRouter } from "./routes/merchant";
 
 const port = 3000;
 const app = express();
@@ -16,7 +15,6 @@ app.use("/api/v1/order", orderRouter);
 
 app.use("/api/v1/restaurants", searchRouter);
 
-app.use("/api/v1/merchant", MerchantRouter);
 
 
 app.listen(port, () => {
