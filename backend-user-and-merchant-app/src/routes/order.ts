@@ -36,6 +36,7 @@ router.post("/create-order",authMiddleWare, async (req, res) => {
 
     } catch (error) {
         console.log(error)
+        return res.status(500)
     }
     
 })

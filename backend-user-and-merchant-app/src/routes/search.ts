@@ -12,9 +12,11 @@ router.get("/", authMiddleWare,async(req,res) => {
   const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
    
   try {
+    setTimeout( async () => {
     const response = await fetch(url);
     const data = await response.json();
     res.json(data.elements);
+    },1000)
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
