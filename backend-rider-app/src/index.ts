@@ -11,9 +11,6 @@ const io = new Server(server)
 app.use(express.json());
 app.use(cors());
 
-const TOPIC_NAME = "deliveries"
-
-
 
 
 app.use("/api/v1/rider",Riderrouter)
