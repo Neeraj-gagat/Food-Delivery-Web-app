@@ -2,8 +2,22 @@ import { Router } from "express";
 import { prismaClient } from "../db/db";
 import { orderCreateSchema } from "../types/types";
 import { authMiddleWare } from "../middleware";
+import redis from "../redis/redisClient";
 
+interface OrderDetails{
+    id:number;
+    userId: number;
+    merchantId: number;
+    items: string[];
+    createdAt:Date;
+    updatedAt:Date;
+}
 const router = Router();
+
+const publishOrder = async (order: OrderDetails) => {
+    await redis.publish('new-orders', JSON.stringify(order));
+    console.log('Order published:', order);
+};
 
 router.post("/create-order",authMiddleWare, async (req, res) => {
     // @ts-ignore
@@ -29,6 +43,8 @@ router.post("/create-order",authMiddleWare, async (req, res) => {
                 }
             }
         }) 
+
+        publishOrder(orderId)
         
         return res.json({
             orderId
