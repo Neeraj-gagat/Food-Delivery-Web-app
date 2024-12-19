@@ -2,22 +2,36 @@ import { Router } from "express";
 import { prismaClient } from "../db/db";
 import { orderCreateSchema } from "../types/types";
 import { authMiddleWare } from "../middleware";
-import redis from "../redis/redisClient";
-
-interface OrderDetails{
-    id:number;
-    userId: number;
-    merchantId: number;
-    items: string[];
-    createdAt:Date;
-    updatedAt:Date;
-}
+import RabbitMQ from "../rabbitMq/rabbitmq";
+// interface OrderDetails{
+//     id:number;
+//     userId: number;
+//     merchantId: number;
+//     items: string[];
+//     createdAt:Date;
+//     updatedAt:Date;
+// }
 const router = Router();
 
-const publishOrder = async (order: OrderDetails) => {
-    await redis.publish('new-orders', JSON.stringify(order));
-    console.log('Order published:', order);
-};
+const merchantQueue = "Merchantqueue"
+const riderQueue = "riderqueue"
+
+const publishOrder = async (queue:string, OrderMessage:object ) => {
+    
+    try {
+        const rabbitMq = RabbitMQ.getInstance();
+        await rabbitMq.connect();
+        const channel  = rabbitMq.getChannel();
+
+        await channel.assertQueue(queue,{durable:true});
+
+        channel.sendToQueue(queue, Buffer.from(JSON.stringify(OrderMessage)), {persistent:true})
+
+        console.log(`message sent to ${queue}:`, OrderMessage)
+    } catch (error) {
+        console.log(`message not sent because of error:`,error)
+    }
+} 
 
 router.post("/create-order",authMiddleWare, async (req, res) => {
     // @ts-ignore
@@ -44,7 +58,7 @@ router.post("/create-order",authMiddleWare, async (req, res) => {
             }
         }) 
 
-        publishOrder(orderId)
+        publishOrder(merchantQueue,orderId)
         
         return res.json({
             orderId
