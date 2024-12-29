@@ -46,7 +46,7 @@ router.post("/create-order",authMiddleWare, async (req, res) => {
     }
 
     try {
-        const orderId = await prismaClient.order.create({
+        const order = await prismaClient.order.create({
             data:{
                 userId: id,
                 merchantId: parsedData.data.merchantId,
@@ -55,18 +55,34 @@ router.post("/create-order",authMiddleWare, async (req, res) => {
                         name:x.item
                     }))
                 }
+            },
+            include:{
+                items:true
             }
         }) 
 
-        publishOrder(merchantQueue,orderId)
+        const ordermessage = {
+            orderId: order.id,
+            userId: order.userId,
+            merchantId: order.merchantId,
+            items: order.items.map((item) => ({name:item.name}))
+        }
+
+        await Promise.all([
+            publishOrder(merchantQueue,ordermessage),
+            publishOrder(riderQueue,ordermessage)
+        ])
         
-        return res.json({
-            orderId
-        }).status(200)
+        return res.status(200).json({
+            message: "Order created Successfully ",
+            orderId: order.id,
+        })
 
     } catch (error) {
-        console.log(error)
-        return res.status(500)
+        console.log(`Error While Creating Order:`,error)
+        return res.status(500).json({
+            message: "An error occured while creating the order"
+        })
     }
     
 })
