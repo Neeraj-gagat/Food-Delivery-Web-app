@@ -4,6 +4,7 @@ import cors from "cors";
 import http from "http"
 import { Server } from "socket.io";
 import { Riderrouter } from "./routes/rider";
+import consumeMessages from "./consumer";
 
 const app:Express = express();
 const server = http.createServer(app)
@@ -15,11 +16,24 @@ app.use(cors());
 
 app.use("/api/v1/rider",Riderrouter)
 
-const deliveries:String[] = []
+const RIDER_Queue = "riderqueue"
+const deliveries: Record<string, any> = {};
 const activeDeliveries: Record<
   string,
   { riderSocketId: string; userSocketId?: string; status: string }
 > = {};
+
+const processOrder = () => {
+  consumeMessages(RIDER_Queue,(message:any) =>{
+  
+    console.log(`Received order_message from RabbitMQ:${JSON.stringify(message)}`);
+
+    io.emit("new-order",message);
+
+  }).catch((error) => {
+    console.error(`Failed to catch order_message from RabbitMQ`,error)
+  });
+  };
 
 // WebSocket Connection
 io.on("connection", (Socket) => {
@@ -57,4 +71,6 @@ io.on("connection", (Socket) => {
     })
 })
 
-app.listen(3001)
+server.listen(3001)
+
+processOrder()
