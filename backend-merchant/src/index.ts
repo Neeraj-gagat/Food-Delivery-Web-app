@@ -17,14 +17,12 @@ app.use("/api/v1/merchant",MerchantRouter)
 
 app.use("api/v1/item",ItemRouter)
 
-// Map to store restaurant (merchant) socket connections
 const merchantSockets: Record<number, string> = {};
 
 // WebSocket Connection
 io.on("connection", (socket) => {
   console.log("Restaurant connected:", socket.id);
 
-  // Register merchant ID when they connect
   socket.on("register-merchant", (merchantId: number) => {
     console.log(`Merchant ${merchantId} connected with socket ID ${socket.id}`);
     merchantSockets[merchantId] = socket.id;
@@ -42,7 +40,7 @@ io.on("connection", (socket) => {
 });
 
 const processOrder = () => {
-  const restaurantQueue = "restaurantQueue"; // RabbitMQ queue for restaurants
+  const restaurantQueue = "Merchantqueue";
 
   consumeMessages(restaurantQueue, (ordermessage: any) => {
     console.log(`Received order message from RabbitMQ:`, ordermessage);
