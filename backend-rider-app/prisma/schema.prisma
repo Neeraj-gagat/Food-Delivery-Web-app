@@ -29,7 +29,9 @@ model Order {
   updatedAt    DateTime      @updatedAt
   items        OrderItem[]
   merchant     Merchant      @relation(fields: [merchantId],references: [id])
-  merchantId   Int          
+  merchantId   Int  
+  status       String        @default("pending")
+  riderId      Int?        
 }
 
 model MerchantItem {
