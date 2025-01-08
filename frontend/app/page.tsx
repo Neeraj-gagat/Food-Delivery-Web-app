@@ -7,8 +7,8 @@ export default function Home() {
     <Appbar/>
     <div className="justify-center flex">
       <div className="">
-    <Circular_Canvas></Circular_Canvas>
-    {/* <HeroSectionLanding></HeroSectionLanding> */}
+    {/* <Circular_Canvas></Circular_Canvas> */}
+    <HeroSectionLanding></HeroSectionLanding>
     </div>
     </div>
   </div>
