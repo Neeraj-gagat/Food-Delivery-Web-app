@@ -7,13 +7,14 @@ import { Bloom, EffectComposer, ToneMapping } from "@react-three/postprocessing"
 
 export const Circular_Canvas = () => {
 
-    return ( <div className="bg-white w-[400px] h-[450px] flex justify-center">
-        <Canvas camera={{fov:70}}>
-            <OrbitControls/>
+    return ( <div className="bg-red-700 pb-8 w-[400px] h-[300px] flex justify-center">
+        <Canvas camera={{fov:52}}>
+            <OrbitControls enableZoom={false}/>
             <ambientLight />
             <Scene/>
             <EffectComposer > 
             <Bloom
+                
                 mipmapBlur
                 intensity={3.0} // The bloom intensity.
                 luminanceThreshold={0} // luminance threshold. Raise this value to mask out darker elements in the scene.
